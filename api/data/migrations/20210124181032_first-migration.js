@@ -19,7 +19,7 @@ exports.up = async (knex) => {
       table.string("food_name")
     })
 
-    // Guests table
+    // Guests Info table
     .createTable("guests", (table) => {
       table.increments("guest_id")
       table.string("guest_name")
@@ -31,10 +31,10 @@ exports.up = async (knex) => {
         .onDelete("RESTRICT")
     })
 
-    // Potluck (Event Info) table
-    .createTable("potlucks", (table) => {
-      table.increments("potluck_id")
-      table.string("potluckName")
+    // Events (Event Info) table
+    .createTable("events", (table) => {
+      table.increments("event_id")
+      table.string("event_name")
         .notNullable()
       table.string("date")
         .notNullable()
@@ -42,57 +42,34 @@ exports.up = async (knex) => {
         .notNullable()
       table.string("location")
         .notNullable()
+    })
+
+    // Attending Guests table
+    .createTable("invites", (table) => {
+      table.increments("invite_id")
       table.integer("user_id")
         .unsigned()
-        .notNullable()
         .references("user_id")
         .inTable("users")
         .onUpdate("RESTRICT")
         .onDelete("RESTRICT")
-    })
-
-    // Potluck Foods (Info) table
-    .createTable("potluck_foods", (table) => {
-      table.increments("potluck_food_id")
-      table.integer("potluck_id")
+      table.integer("event_id")
         .unsigned()
         .notNullable()
-        .references("potluck_id")
+        .references("event_id")
         .inTable("potlucks")
         .onUpdate("RESTRICT")
         .onDelete("RESTRICT")
-      table.integer("food_id")
-        .unsigned().notNullable()
-        .references("food_id")
-        .inTable("foods")
-        .onUpdate("RESTRICT")
-        .onDelete("RESTRICT")
-    })
-
-    // Potluck Guests (Event Guests) table
-    .createTable("potluck_guests", (table) => {
-      table.increments("potluck_guest_id")
-      table.integer("potluck_id")
-        .unsigned()
-        .notNullable()
-        .references("potluck_id")
-        .inTable("potlucks")
-        .onUpdate("RESTRICT")
-        .onDelete("RESTRICT")
-      table.integer("guest_id")
-        .unsigned()
-        .notNullable()
-        .references("guest_id")
-        .inTable("guests")
-        .onUpdate("RESTRICT")
-        .onDelete("RESTRICT")
+      table.boolean("organizer")
+        .defaultTo(false)
+      table.boolean("is_going")
+        .defaultTo(false)
     })
 }
 
 exports.down = async (knex) => {
-  await knex.schema.dropTableIfExists("potluck_guests")
-  await knex.schema.dropTableIfExists("potluck_foods")
-  await knex.schema.dropTableIfExists("potlucks")
+  await knex.schema.dropTableIfExists("invites")
+  await knex.schema.dropTableIfExists("events")
   await knex.schema.dropTableIfExists("guests")
   await knex.schema.dropTableIfExists("foods")
   await knex.schema.dropTableIfExists("users")
