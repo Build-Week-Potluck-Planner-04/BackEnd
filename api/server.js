@@ -5,7 +5,7 @@ const cors = require('cors')
 
 const usersRouter = require("./users/users-router");
 const authRouter = require("./auth/auth-router");
-const eventRouter = require("./events/events-router");
+const eventsRouter = require("./events/events-router");
 const guestsRouter = require("./guests/guests-router");
 
 const server = express()
@@ -15,7 +15,7 @@ server.use(cors())
 
 server.use("api/users", usersRouter);
 server.use("api/auth", authRouter);
-server.use("api/events", eventRouter);
+server.use("api/events", eventsRouter);
 server.use("api/guests", guestsRouter);
 
 server.use((err, req, res, next) => { 
