@@ -1,4 +1,5 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 const Users = require("../users/users-model");
 const Events = require("./events-model");
 const { 
